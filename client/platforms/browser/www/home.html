@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localForage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+
+<script>
+
+
+function loadDoc() {
+var lang, lon, lat;
+
+
+    localforage.getItem('langLF').then(function(value) { 
+	console.log("retrieve from lang from storage:"+value);
+	lang=value;
+			localforage.getItem('longLF').then(function(value) { 
+			console.log("retrieve from long from storage:"+value);
+			lon = value;
+				localforage.getItem('latLF').then(function(value) { 
+				console.log("retrieve lat from storage:"+value); 
+				lat= value;			
+						
+					getfromcontroller(lang, lon, lat);
+			
+			});
+		});
+	});	
+
+	function getfromcontroller(la,lg,lt){
+			 
+				var xhttp = new XMLHttpRequest();
+				var controller = getController();
+				xhttp.onreadystatechange = function() {
+
+				if (this.readyState == 4 && this.status == 200) {
+				document.getElementById("demo").innerHTML = this.responseText;   }
+
+					};
+
+  
+				xhttp.open("GET", controller+"home.php?lang="+la+"&lon="+lg+"&lat="+lt, true);	
+				console.log("get info from: " + controller+"home.php?lang="+la+"&lon="+lg+"&lat="+lt );
+				xhttp.send();
+		}
+
+}
+
+		
+
+</script>
+</head>
+
+<body onload="loadDoc()">
+<div id="demo"></div>
+
+</body>
+
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+  <script type="text/javascript" src="js/getControllerContents.js"></script>
+     <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script>
+		  localforage.getItem('langLF').then(function(value) { 
+			console.log("retrieve from lang from storage:"+value);
+			document.getElementById("lang").value = value;	
+			localforage.getItem('longLF').then(function(value) { 
+			console.log("retrieve from long from storage:"+value);
+			document.getElementById("lon").value = value;	
+				localforage.getItem('latLF').then(function(value) { 
+				console.log("retrieve lat from storage:"+value); 
+				document.getElementById("lat").value = value;	
+			
+			});
+		});
+	});	
+
+	</script>
+</head>
+<body>
+	<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+
+<form id="searchVenue">
+	<h3 align="center"> Search Venue </h3>
+	<table align="center">
+	<tr>
+    <td>Venue Name: </td>
+	<td>
+    <input id="search" name="search" type="text" value="" />
+	<input hidden readonly id="lang" name="lang" type="text" value="" />
+	<input hidden readonly id="lon" name="lon" type="text" value="" />
+	<input hidden readonly id="lat" name="lat" type="text" value="" />
+	</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"><input type="submit" value="Send" /></td>
+		</tr>
+	<table>
+	
+</form>
+<div id="result"></div>
+<br/><br/>
+<img src="img/fsq.png" width="100%" />
+<div id="footer"></div>
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script>
+//https://stackoverflow.com/a/14217926
+	
+	
+	/* Attach a submit handler to the form */
+$("#searchVenue").submit(function(event) {
+    var ajaxRequest;
+
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Clear result div*/
+    $("#result").html('');
+
+    /* Get from elements values */
+    var values = $(this).serialize();
+
+    /* Send the data using post and put the results in a div. */
+    /* I am not aborting the previous request, because it's an
+       asynchronous request, meaning once it's sent it's out
+       there. But in case you want to abort it you can do it
+       by abort(). jQuery Ajax methods return an XMLHttpRequest
+       object, so you can just use abort(). */
+       ajaxRequest= $.ajax({
+            url:  getController() + "searchVenue.php",
+            type: "post",
+            data: values
+        });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+
+    ajaxRequest.done(function (response, textStatus, jqXHR){
+
+         // Show successfully for submit message
+         $("#result").html('Submitted successfully');
+			$("#result").html(response);
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function (){
+
+        // Show error
+        $("#result").html('There is error while submit');
+    });
+	
+
+
+});
+</script>
+</ons-page>
+</body>
+
+
+</html>

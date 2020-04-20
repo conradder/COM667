@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+  <script type="text/javascript" src="js/getControllerContents.js"></script>
+   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script>
+  
+  function getLangFromStorage(){
+		  localforage.getItem('langLF').then(function(value) { 
+			console.log("retrieve from lang from storage:"+value);
+			document.getElementById("lang").value = value;	
+			
+			
+			  if (value=="GA"){
+				document.getElementById("emDisp").innerHTML = "R-phost";
+			document.getElementById("titleDisp").innerHTML = "Pasfhocal a athshocrú ";
+			document.getElementById("butt").value = "Athshocraigh";
+			}
+			else
+			
+		{
+			document.getElementById("emDisp").innerHTML = "Enter E-Mail";
+			document.getElementById("resetDisp").innerHTML = "<a href='createAcc.html'>Reset Password</a>";
+			document.getElementById("butt").value = "Reset Password";
+		}
+			
+		
+	});	
+}
+	</script>
+</head>
+<body onload="getLangFromStorage()";>
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+
+<form id="pwreset">
+	<h5 id="titleDisp">Reset Password</h5>
+<table align="center">
+<tr>
+  <td>  <label id="emDisp" for="em">Enter Email</label></td>
+    <td><input id="em" name="em" type="text" value="" /></td>
+</tr>
+<td colspan="2" align="center"> 	<input hidden readonly id="lang" name="lang" type="text" value="" />
+	
+    <input id="butt" type="submit" value="Send" />
+	</td>
+	</table>
+	
+</form>
+
+
+
+<div id="result"></div>
+
+<div id="footer"></div>
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script>
+//https://stackoverflow.com/a/14217926
+	
+	
+	/* Attach a submit handler to the form */
+$("#pwreset").submit(function(event) {
+    var ajaxRequest;
+
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Clear result div*/
+    $("#result").html('');
+
+    /* Get from elements values */
+    var values = $(this).serialize();
+
+    /* Send the data using post and put the results in a div. */
+    /* I am not aborting the previous request, because it's an
+       asynchronous request, meaning once it's sent it's out
+       there. But in case you want to abort it you can do it
+       by abort(). jQuery Ajax methods return an XMLHttpRequest
+       object, so you can just use abort(). */
+       ajaxRequest= $.ajax({
+            url:  getController() + "resetPW.php",
+            type: "post",
+            data: values
+        });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+
+    ajaxRequest.done(function (response, textStatus, jqXHR){
+
+         // Show successfully for submit message
+         $("#result").html('Submitted successfully');
+			$("#result").html(response);
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function (){
+
+        // Show error
+        $("#result").html('There is error while submit');
+    });
+	
+
+
+});
+</script>
+
+</ons-page>
+</body>
+
+
+</html>

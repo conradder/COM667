@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+ <script type="text/javascript" src="js/getControllerContents.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+
+<script>
+
+function loadDoc(clientPage) {
+
+
+	var param = window.location.search.substr(1).split('&');
+			
+				function getParamaters(theParamater){
+				
+					for (var i = 0; i< param.length; i++){
+					
+					var p=param[i].split('=');
+					if (p[0] == theParamater){
+						return decodeURIComponent(p[1]);
+						}//if
+					}//for
+					return "";
+				}//func
+			
+
+
+
+
+			 
+				var xhttp = new XMLHttpRequest();
+				var controller = getController();
+				xhttp.onreadystatechange = function() {
+
+				if (this.readyState == 4 && this.status == 200) {
+				document.getElementById("event").innerHTML = this.responseText;   }
+
+					};
+
+  
+				xhttp.open("GET", controller+clientPage+".php?eID="+getParamaters('eID')+"&uID="+getParamaters('uID'), true);	
+				xhttp.send();
+		
+
+}
+
+
+</script>
+
+
+</head>
+
+<body onload="loadDoc('declareInterest')">
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+<div id="event"></div>
+<div id="footer"></div>
+</ons-page>
+
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+</body>
+
+
+</html>

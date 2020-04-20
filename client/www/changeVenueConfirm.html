@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+ <script type="text/javascript" src="js/getControllerContents.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+<script>
+
+function loadDoc(clientPage) {
+var lang, log;
+
+	var param = window.location.search.substr(1).split('&');
+			
+				function getParamaters(theParamater){
+				
+					for (var i = 0; i< param.length; i++){
+					
+					var p=param[i].split('=');
+					if (p[0] == theParamater){
+						return decodeURIComponent(p[1]);
+						}//if
+					}//for
+					return "";
+				}//func
+			
+
+
+    localforage.getItem('langLF').then(function(value) { 
+	console.log("retrieve from lang from storage:"+value);
+	lang=value;	
+					localforage.getItem('lfHash').then(function(value) { 
+				console.log("retrieve loginHash from storage:"+value); 
+					log= value;	
+					//get a login hash!!!!	
+			
+						getfromcontroller(lang,  log, getParamaters('evID'), getParamaters('id'), getParamaters('name'), getParamaters('lng'), getParamaters('lat'),  getParamaters('city'), getParamaters('add') );
+				});
+	});	
+
+	function getfromcontroller(la,log,evID, fqid, nme, lng, lat, city, add){
+			 
+				var xhttp = new XMLHttpRequest();
+				var controller = getController();
+				xhttp.onreadystatechange = function() {
+
+				if (this.readyState == 4 && this.status == 200) {
+				document.getElementById("event").innerHTML = this.responseText;   }
+
+					};
+
+// 
+				xhttp.open("GET", controller+clientPage+".php?lang="+la+"&login="+log+"&evID="+evID+"&fqid="+fqid+"&name="+nme+"&vlng="+lng+"&vlat="+lat+"&address="+add+"&city="+city, true);	
+				//console.log("get info from: " + controller+"event.php?lang="+la+"&lon="+lg+"&lat="+lt+'&login='+log );
+				xhttp.send();
+		}
+
+}
+
+
+</script>
+
+
+</head>
+
+<body onload="loadDoc('changeVenueConfirm')">
+	<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+<div id="event"></div>
+<div id="footer"></div>
+	</ons-page>
+
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+</body>
+
+
+</html>

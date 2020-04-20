@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+ <script type="text/javascript" src="js/getControllerContents.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+
+
+<script type="text/javascript">
+			
+				var param = window.location.search.substr(1).split('&');
+			
+				function getParamaters(theParamater){
+				
+					for (var i = 0; i< param.length; i++){
+					
+					var p=param[i].split('=');
+					if (p[0] == theParamater){
+					
+						return decodeURIComponent(p[1]);
+						}//if
+					}//for
+					return false;
+				}//func
+			
+			
+			
+				function onPgeLoad(){	
+				
+				localforage.getItem('lfHash').then(function(value) { 
+				console.log("retrieve lfHash from storage:"+value); 
+				document.getElementById("hash").value = value;		
+				});
+				
+				localforage.getItem('langLF').then(function(value) { 
+				console.log("retrieve lfHash from storage:"+value); 
+						
+			
+				if  (value == "GA"){
+				document.getElementById("userdDisplay").innerHTML = "Sonraí úsáideoir";
+				document.getElementById("fnDisp").innerHTML = "Céadainm";
+				document.getElementById("snDisp").innerHTML = "Sloinne";
+				document.getElementById("emDisp").innerHTML = "R-phost";
+				document.getElementById("utDisp").innerHTML = "Cineál úsáideoir";
+				document.getElementById("ut1").innerHTML = "Riarthóir";
+				document.getElementById("ut2").innerHTML = "Caighdeán";
+				}
+				else
+				{
+				document.getElementById("userdDisplay").innerHTML = "User Details";
+				document.getElementById("fnDisp").innerHTML = "Forename";
+				document.getElementById("snDisp").innerHTML = "Surname";
+				document.getElementById("emDisp").innerHTML = "Email";
+				document.getElementById("utDisp").innerHTML = "Usertype";
+				document.getElementById("ut1").innerHTML = "Admin";
+				document.getElementById("ut2").innerHTML = "Standard";
+				}
+					
+
+				});
+				
+				
+				
+				document.getElementById("uID").value = getParamaters('id');
+				document.getElementById("fname").value = getParamaters('fname');
+				document.getElementById("sname").value = getParamaters('sname');
+				document.getElementById("email").value = getParamaters('email');
+				document.getElementById("utype").value = getParamaters('utype');
+					
+				
+				}
+				
+				
+		
+				
+				
+				</script>
+
+
+
+
+
+</head>
+
+<body onload="onPgeLoad()">
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+<form id="editAcc">
+	<table align="center">
+		<tr>
+			<td colspan="2" align="center"><h5>Admin Password Required to Make Changes</h5></td>
+		</tr>
+		<tr>
+			<td>Admin Password: </td><td> <input id="pw" name="pw" type="Password" value="" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><h5 id="userdDisplay"> User Details</h5></td>
+		</tr>
+		<tr>
+			<td id="fnDisp">Forname: </td><td><input id="fname" name="fname" type="text" value=""  /></td>
+		</tr>
+		<tr>
+			<td id="snDisp">Surname: </td><td><input id="sname" name="sname" type="text" value="" /></td>
+		</tr>
+		<tr>
+			<td id="emDisp">E-Mail: </td><td> <input id="email" name="email" type="text" value="" /></td>
+		</tr>
+		<tr>
+			<td id="utDisp">Usertype: </td><td><select id="utype" name="utype">
+		<option id="ut2" value="2">Standard</option>
+		<option id="ut1" value="1">Admin </option>  
+	</select></td>
+		</tr>
+		<tr><td colspan="2" align="center">
+	<input readonly hidden id="hash" name="hash" type="text" value="">
+		<input readonly hidden id="uID" name="uID" type="text" value="">
+	
+    <input type="submit" value="Send" /> </td>
+	</table>	
+</form>
+
+<div id="result"></div>
+<div id="footer"></div>
+
+</select>
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script>
+//https://stackoverflow.com/a/14217926
+	
+	
+	/* Attach a submit handler to the form */
+$("#editAcc").submit(function(event) {
+    var ajaxRequest;
+
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Clear result div*/
+    $("#result").html('');
+
+    /* Get from elements values */
+    var values = $(this).serialize();
+
+    /* Send the data using post and put the results in a div. */
+    /* I am not aborting the previous request, because it's an
+       asynchronous request, meaning once it's sent it's out
+       there. But in case you want to abort it you can do it
+       by abort(). jQuery Ajax methods return an XMLHttpRequest
+       object, so you can just use abort(). */
+       ajaxRequest= $.ajax({
+            url:  getController() + "adminEditUser.php",
+            type: "post",
+            data: values
+        });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+
+    ajaxRequest.done(function (response, textStatus, jqXHR){
+
+         // Show successfully for submit message
+         $("#result").html('Submitted successfully');
+			$("#result").html(response);
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function (){
+
+        // Show error
+        $("#result").html('There is error while submit');
+    });
+	
+
+
+});
+</script>
+</ons-page>
+</body>
+
+
+</html>

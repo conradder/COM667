@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'transport';
+    src: url('../font/RaoulTRANSPORTBritannique.ttf');
+}
+
+html, body, ons-page {
+   
+    font-size:100%;
+    font:inherit;
+    font-family: transport;
+
+} 

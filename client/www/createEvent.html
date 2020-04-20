@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+  <script type="text/javascript" src="js/getControllerContents.js"></script>
+       <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+
+<script type="text/javascript">
+			
+				var param = window.location.search.substr(1).split('&');
+			
+				function getParamaters(theParamater){
+				
+					for (var i = 0; i< param.length; i++){
+					
+					var p=param[i].split('=');
+					if (p[0] == theParamater){
+						return decodeURIComponent(p[1]);
+						}//if
+					}//for
+					return false;
+				}//func
+			
+			
+			
+				function onPgeLoad(){	
+				
+				localforage.getItem('lfHash').then(function(value) { 
+				console.log("retrieve lfHash from storage:"+value); 
+				document.getElementById("hash").value = value;		
+				});
+				
+					localforage.getItem('langLF').then(function(value) { 
+				console.log("retrieve lfHash from storage:"+value); 
+				//document.getElementById("hash").value = value;		
+					if (value=="GA"){
+					document.getElementById("butt").value = "Cuir isteach";
+					document.getElementById("locDisp").innerHTML = "Áit";
+					document.getElementById("dateDisp").innerHTML = "Dáta";
+					document.getElementById("timeDisp").innerHTML = "Am";
+					document.getElementById("noteDisp").innerHTML = "Nótaí";
+					
+					}
+					else
+					{
+					document.getElementById("butt").value = "Submit";
+					document.getElementById("locDisp").innerHTML = "Venue";
+					document.getElementById("dateDisp").innerHTML = "Date";
+					document.getElementById("timeDisp").innerHTML = "Time";
+					document.getElementById("noteDisp").innerHTML = "Notes";
+					}
+
+
+			});
+				
+				var vID= document.getElementById("vID");
+				vID.value = vID.value + getParamaters('id');
+				var vName= document.getElementById("vName");
+				vName.value = vName.value + getParamaters('name');
+				var vAdd= document.getElementById("vAdd");
+				vAdd.value = vAdd.value + getParamaters('add');
+				var vCity= document.getElementById("vCity");
+				vCity.value = vCity.value + getParamaters('city');
+				var vLng= document.getElementById("vLng");
+				vLng.value = vLng.value + getParamaters('lng');
+				var vLat= document.getElementById("vLat");
+				vLat.value = vLat.value + getParamaters('lat');
+				
+				document.getElementById("loc").innerHTML =getParamaters('name');
+				
+				}</script>
+ <!--<link rel="stylesheet" href="css/datepicker.min.css">
+<script src="js/datepicker.min.js"></script>-->
+</head>
+<body onload="onPgeLoad()">
+	<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+<h3 id ="title" align="center"> Details </h3>
+<form id="createEvent">
+	<table align="center">
+		<tr>
+			<td id="locDisp">Location: </td><td id="loc"></td>
+		</tr>
+		<tr>
+			<td id="dateDisp"> Date: </td><td><input id="date" name="date" type="date" value=""  /></td>
+		</tr>
+		<tr>
+			<td id="timeDisp">time: </td><td><input id="time" name="time" type="time" value="" /></td>
+		</tr>
+		<tr>
+			<td id="noteDisp">notes </td><td><textarea name="notes" id="notes" form="createEvent"></textarea><br/>
+	<input readonly hidden  id="hash" name="hash" type="text" value="">
+		<input readonly hidden id="vID" name="vID" type="text" value="">
+		<input readonly  hidden  id="vAdd" name="vAdd" type="text" value="">
+		<input readonly hidden  id="vCity" name="vCity" type="text" value="">
+		<input readonly hidden  id="vLng" name="vLng" type="text" value="">
+		<input readonly hidden id="vName" name="vName" type="text" value="">
+		<input  readonly hidden  id="vLat" name="vLat" type="text" value=""></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><input id="butt" type="submit" value="Send" /> </td>
+		</tr>
+		</table>
+</form>
+
+<div id="result"></div><br/><br/><br/><br/><br/><br/><br/>
+<div id="footer"></div>
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script>
+//https://stackoverflow.com/a/14217926
+	
+	
+	/* Attach a submit handler to the form */
+$("#createEvent").submit(function(event) {
+    var ajaxRequest;
+
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Clear result div*/
+    $("#result").html('');
+
+    /* Get from elements values */
+    var values = $(this).serialize();
+
+    /* Send the data using post and put the results in a div. */
+    /* I am not aborting the previous request, because it's an
+       asynchronous request, meaning once it's sent it's out
+       there. But in case you want to abort it you can do it
+       by abort(). jQuery Ajax methods return an XMLHttpRequest
+       object, so you can just use abort(). */
+       ajaxRequest= $.ajax({
+            url:  getController() + "createEvent.php",
+            type: "post",
+            data: values
+        });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+
+    ajaxRequest.done(function (response, textStatus, jqXHR){
+
+         // Show successfully for submit message
+         $("#result").html('Submitted successfully');
+			$("#result").html(response);
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function (){
+
+        // Show error
+        $("#result").html('There is error while submit');
+    });
+	
+
+
+});
+</script>
+</ons-page>
+
+</body>
+
+
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+ <script type="text/javascript" src="js/getControllerContents.js"></script>
+			    
+			         <script>
+					 function logout(){
+						localforage.setItem('lfHash','').then(function(value){
+							console.log('hash set to null'); 
+							alert('Log Out Scuessful!');
+						window.location.href='home.html';	
+							
+						});//set hash to lf
+						
+						}
+						</script>
+</head>
+
+<body onload="logout()">
+
+</body>
+
+
+</html>

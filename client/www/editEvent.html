@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+ <script type="text/javascript" src="js/getControllerContents.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+
+
+
+<script type="text/javascript">
+			
+				var param = window.location.search.substr(1).split('&');
+			
+				function getParamaters(theParamater){
+				
+					for (var i = 0; i< param.length; i++){
+					
+					var p=param[i].split('=');
+					if (p[0] == theParamater){
+					
+						return decodeURIComponent(p[1]);
+						}//if
+					}//for
+					return false;
+				}//func
+			
+			
+			
+				function onPgeLoad(){	
+				
+				localforage.getItem('lfHash').then(function(value) { 
+				console.log("retrieve lfHash from storage:"+value); 
+				document.getElementById("hash").value = value;		
+				});
+				
+				
+				var evID= document.getElementById("evID");
+				evID.value = evID.value + getParamaters('id');
+				//var date = document.getElementById("evDate");
+				//date.value = date.value + getParamaters('evDate');
+				document.getElementById("date").value = getParamaters('evDate');
+				document.getElementById("time").value = getParamaters('evTime');
+				
+				var notes = "";
+				notes = getParamaters('evNotes');
+				
+				if (getParamaters('cancelled')==1)
+					document.getElementById("cancelled").checked=true;
+					else
+					document.getElementById("cancelled").checked=false;
+				
+			  document.getElementById("notes").value= decodeURIComponent(getParamaters('evNotes'));
+			  document.getElementById("loc").value = getParamaters('venue');
+			  
+			  
+			  var lang = getParamaters('lang');
+			  
+			  if (lang=="GA"){
+				document.getElementById("butt").value = "Cuir isteach";
+				document.getElementById("dateDisp").innerHTML = "Dáta";
+				document.getElementById("timeDisp").innerHTML = "Am";
+				document.getElementById("noteDisp").innerHTML = "Nótaí";
+				document.getElementById("cancelDisp").innerHTML = "Cuir ar ceal?";
+				document.getElementById("titleDisp").innerHTML = "Cuir in eagar ";
+			  
+			  }
+			  else
+			  {
+				document.getElementById("butt").value = "Submit";
+				document.getElementById("dateDisp").innerHTML = "Date: ";
+				document.getElementById("timeDisp").innerHTML = "Time: ";
+				document.getElementById("noteDisp").innerHTML = "Notes: ";
+				document.getElementById("cancelDisp").innerHTML = "Cancel?";
+				document.getElementById("titleDisp").innerHTML = "Edit Event ";
+			  
+			  }
+			  
+			  
+			  
+				//alert(getParamaters('evNotes'));
+				}</script>
+
+
+
+
+
+</head>
+
+<body onload="onPgeLoad()">
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+
+<h2 id="titleDisp">Edit Event</h2>
+<form id="editEvent">
+	<table>
+	<tr>
+	<td id="dateDisp">Date:</td>
+	<td><input id="date" name="date" type="date" value=""  /></td>
+   </tr>
+   <tr>
+		<td id="timeDisp">Time: </td>
+		<td><input id="time" name="time" type="time" value="" /></td> 
+	</tr>
+	<tr>
+		<td id ="noteDisp">Notes</td>
+		<td> <textarea name="notes" id="notes" form="editEvent" value=""></textarea></td>
+	</tr>
+	<tr>
+		<td id="cancelDisp">Cancel Event? </td>
+		<td><input type="checkbox" id="cancelled" name="cancelled" value=""></td>
+	</tr>
+	<input readonly hidden  id="hash" name="hash" type="text" value="">
+		<input readonly hidden id="evID" name="evID" type="text" value="">
+			<input readonly hidden id="loc" name="loc" type="text" value="">
+	
+    <tr><td colspan="2" align="center"><input id="butt" type="submit" value="Send" /></td></tr>
+		</table>
+</form>
+
+<div id="result"></div>
+<div id="footer"></div>
+
+</select>
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script>
+//https://stackoverflow.com/a/14217926
+	
+	
+	/* Attach a submit handler to the form */
+$("#editEvent").submit(function(event) {
+    var ajaxRequest;
+
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Clear result div*/
+    $("#result").html('');
+
+    /* Get from elements values */
+    var values = $(this).serialize();
+
+    /* Send the data using post and put the results in a div. */
+    /* I am not aborting the previous request, because it's an
+       asynchronous request, meaning once it's sent it's out
+       there. But in case you want to abort it you can do it
+       by abort(). jQuery Ajax methods return an XMLHttpRequest
+       object, so you can just use abort(). */
+       ajaxRequest= $.ajax({
+            url:  getController() + "editEvent.php",
+            type: "post",
+            data: values
+        });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+
+    ajaxRequest.done(function (response, textStatus, jqXHR){
+
+         // Show successfully for submit message
+         $("#result").html('Submitted successfully');
+			$("#result").html(response);
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function (){
+
+        // Show error
+        $("#result").html('There is error while submit');
+    });
+	
+
+
+});
+</script>
+</ons-page>
+</body>
+
+
+</html>

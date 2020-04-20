@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+  <script type="text/javascript" src="js/getControllerContents.js"></script>
+   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+<script>
+function getLangFromStorage(){
+
+localforage.getItem('langLF', function(err, value) {
+      console.log("retrieve language prefrence:" + value); //console
+	  	 
+		  if (value=="GA"){
+		  document.getElementById("titleDisp").innerHTML = "Cuntas Nua";
+				document.getElementById("forname").innerHTML = "Céadainm";
+			document.getElementById("surname").innerHTML = "Sloinne";
+				document.getElementById("emDisp").innerHTML = "R-phost";
+				document.getElementById("cEmDisp").innerHTML = "R-phost aris";
+				document.getElementById("pwDisp").innerHTML = "Pasfhocal";
+			document.getElementById("cPwDisp").innerHTML = "Pasfhocal aris";
+		
+			document.getElementById("butt").value = "Cuir isteach";
+			
+			
+			}
+			else
+			
+		{	
+		document.getElementById("titleDisp").innerHTML = "Create Account";
+			document.getElementById("forname").innerHTML = "Forename";
+			document.getElementById("surname").innerHTML = "Surname";
+			document.getElementById("emDisp").innerHTML = "E-Mail";
+			document.getElementById("cEmDisp").innerHTML = "Confirm E-Mail";
+			document.getElementById("pwDisp").innerHTML = "Password";
+			document.getElementById("cPwDisp").innerHTML = "Conmfirm Password";
+		
+			document.getElementById("butt").value = "Submit";
+		}
+			
+		});//getItem
+}//getNameFromStorage()
+
+
+</script>
+
+
+</head>
+<body onload="getLangFromStorage();">
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+
+<form id="createAcc">
+<h3 id="titleDisp"> Create Account </h3>
+<table align="center">
+    <tr>
+		<td id="forname">Forename</td>
+		<td><input id="fName" name="fName" type="text" value="" /></td>
+	</tr>
+	<tr>
+	<td id="surname">Surname</td>
+	<td><input id="sName" name="sName" type="text" value="" /></td>
+	</tr>
+	<tr>
+	<td id="emDisp">Email</td>
+	<td><input id="email" name="email" type="text" value="" /></td>
+	</tr>
+	<tr>
+	<td id="cEmDisp">Confirm email</td>
+	<td><input id="cEmail" name="cEmail" type="text" value="" /></td>
+	</tr>
+	<tr>
+	<td id="pwDisp">Password</td>
+	<td><input id="pw" name="pw" type="password" value="" /><td>
+	</tr>
+	<tr>
+	<td id="cPwDisp">Confirm password</td>
+	<td><input id="cPw" name="cPw" type="password" value="" /></td>
+    </tr>
+	<tr>
+	<td align="center" colspan="2"><input id="butt" type="submit" value="Send" /></td>
+	</tr>
+</table>
+</form>
+
+<div id="result"></div><br/><br/><br/><br/><br/><br/><br/><br/>
+
+<div id="footer"></div>
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+<script>
+//https://stackoverflow.com/a/14217926
+	
+	
+	/* Attach a submit handler to the form */
+$("#createAcc").submit(function(event) {
+    var ajaxRequest;
+
+    /* Stop form from submitting normally */
+    event.preventDefault();
+
+    /* Clear result div*/
+    $("#result").html('');
+
+    /* Get from elements values */
+    var values = $(this).serialize();
+
+    /* Send the data using post and put the results in a div. */
+    /* I am not aborting the previous request, because it's an
+       asynchronous request, meaning once it's sent it's out
+       there. But in case you want to abort it you can do it
+       by abort(). jQuery Ajax methods return an XMLHttpRequest
+       object, so you can just use abort(). */
+       ajaxRequest= $.ajax({
+            url:  getController() + "createAcc.php",
+            type: "post",
+            data: values
+        });
+
+    /*  Request can be aborted by ajaxRequest.abort() */
+
+    ajaxRequest.done(function (response, textStatus, jqXHR){
+
+         // Show successfully for submit message
+         $("#result").html('Submitted successfully');
+			$("#result").html(response);
+    });
+
+    /* On failure of request this function will be called  */
+    ajaxRequest.fail(function (){
+
+        // Show error
+        $("#result").html('There is error while submit');
+    });
+	
+
+
+});
+</script>
+</ons-page>
+</body>
+
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+ <script type="text/javascript" src="js/getControllerContents.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+</head>
+<body>
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+
+<p>This App uses <a href="https://foursquare.com/" target="_blank">Foursquare</a> for all venue information. <br/> If you don't see a venue on the app it is most likely because the venue is not on Foursquare, or the venue information is incomplete. You can either let the proprietors of that establishment know you'd like to see them on Foursquare or you can add them yourself! You can even add your own private venue!</p>
+
+We cannot create venues, all venues must be created in Foursquare first! To add a venue, you need to:
+
+<ol>
+  <li>Create a Foursquare account (If you don't have one already.)</li>
+  <li>Create the venue via their Mobile App or via the Web at <a href="https://foursquare.com/add-place" target="_blank">https://foursquare.com/add-place</a>.</li>
+  <li>Check into the location on Foursquare.</li>
+  <li>See the Home and Private Venues or Public and Retail Venues sections below for additional steps depending on the venue type.</li>
+</ol>
+<br/><br/><br/><br/>
+<div id="footer"></div>
+</ons-page>
+<script type="text/javascript" src="js/headerFooter.js"></script>
+</body>
+
+</html>

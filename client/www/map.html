@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript" src="js/localforage.js"></script>
+ <script type="text/javascript" src="js/getControllerLoc.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+ <!--<script type="text/javascript" src="js/getControllerContents.js"></script>-->
+  <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+<script>  function loadDoc(clientPage) {
+
+
+			localforage.getItem('longLF').then(function(value) { 
+			console.log("retrieve from long from storage:"+value);
+			lon = value;
+				localforage.getItem('latLF').then(function(value) { 
+				console.log("retrieve lat from storage:"+value); 
+				lat= value;			
+				
+			
+						getfromcontroller(lon, lat);
+				});
+			});
+	
+
+
+
+
+
+
+	function getfromcontroller(clon, clat){
+			 				var controller = getController();			
+						var xhttp = new XMLHttpRequest();
+								xhttp.onreadystatechange = function() {
+				  if (this.readyState == 4 && this.status == 200) {
+					var myObj = JSON.parse(this.responseText);
+						
+						
+						
+						var map = L.map('map').setView([clat, clon], 13);
+
+      // add the OpenStreetMap tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+      }).addTo(map);
+
+      // show the scale bar on the lower left corner
+      L.control.scale().addTo(map);
+
+      // show a marker on the map
+     
+	  for (var i=0;i<myObj.length;i++){
+	
+	  
+	var  lng=myObj[i][6];
+	  var olat=myObj[i][5];
+	  
+	  var string = '<b>'+myObj[i][3]+'</b><br/>'+myObj[i][4]+'<br>'+myObj[i][1];
+	  string = string + '<br/><a href="event.html?evID='+myObj[i][0]+'">Info</a>';
+	  
+	    L.marker({lon: lng, lat: olat}).bindPopup(string).addTo(map);
+     
+    }
+	
+				  }
+				};
+				xhttp.open("GET", controller+clientPage+".php", true);
+					xhttp.send();
+		}
+		
+			
+				
+		
+
+}
+</script>
+  
+  
+<script src="js/leaflet/leaflet.js"></script>
+
+
+</head>
+
+<body onload="loadDoc('map')">
+
+<!--<div id="header"></div>-->
+<ons-page ng-infinite-scroll="loadMore">
+<div id="header"></div>
+
+<div id="event"></div>
+<div id='map'></div>
+
+
+   <style>
+
+   
+   
+      html, body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      #map {
+        /* configure the size of the map */
+        width: 100%;
+        height: 100%
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="map"></div>
+	</ons-page> <!--for some reason this makes the footer above the map!-->
+   <div id="footer"></div>
+
+
+
+<script type="text/javascript" src="js/headerFooter.js"></script>
+</body>
+
+
+</html>
