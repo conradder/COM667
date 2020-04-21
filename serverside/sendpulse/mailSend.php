@@ -18,7 +18,7 @@ try {
     $mail->Host       = 'smtp-pulse.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
     $mail->Username   = 'conorfearon@hotmail.com';                     // SMTP username
-    $mail->Password   = 'oZ8EQ8jBeNr290e';                               // SMTP password
+    $mail->Password   = '';      //remove                         // SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     $mail->Port       = 465;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
