@@ -3,7 +3,7 @@
 function db_connect(){
    	$host = 'localhost';
 $username = 'B00699799';
-$password = 'RdM3X9aa';
+$password = ''; //removed
 $database = 'b00699799x';
 
    $result = new mysqli($host, $username, $password, $database);
