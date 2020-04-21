@@ -10,8 +10,8 @@ $mail = new PHPMailer();
 $mail->isSMTP();
 $mail->Host = 'smtp-pulse.com';
 $mail->SMTPAuth = true;
-$mail->Username = 'conorfearon@hotmail.com';
-$mail->Password = 'oZ8EQ8jBeNr29oe';
+$mail->Username = ''; //removed
+$mail->Password = '';//removed
 $mail->SMTPSecure = 'ssl';
 $mail->Port='465';
 $mail->CharSet = 'UTF-8';
@@ -36,8 +36,8 @@ $mail = new PHPMailer();
 $mail->isSMTP();
 $mail->Host = 'smtp-pulse.com';
 $mail->SMTPAuth = true;
-$mail->Username = 'conorfearon@hotmail.com';
-$mail->Password = 'oZ8EQ8jBeNr29oe';
+$mail->Username = ''; //removed
+$mail->Password = ''; //removed
 $mail->SMTPSecure = 'ssl';
 $mail->Port='465';
 $mail->CharSet = 'UTF-8';
@@ -67,8 +67,8 @@ $mail = new PHPMailer();
 $mail->isSMTP();
 $mail->Host = 'smtp-pulse.com';
 $mail->SMTPAuth = true;
-$mail->Username = 'conorfearon@hotmail.com';
-$mail->Password = 'oZ8EQ8jBeNr29oe';
+$mail->Username = ''; //removed
+$mail->Password = ''; //removed
 $mail->SMTPSecure = 'ssl';
 $mail->Port='465';
 $mail->CharSet = 'UTF-8';
@@ -97,8 +97,8 @@ function forgotPW($em, $hash, $fn){
 $mail->isSMTP();
 $mail->Host = 'smtp-pulse.com';
 $mail->SMTPAuth = true;
-$mail->Username = 'conorfearon@hotmail.com';
-$mail->Password = 'oZ8EQ8jBeNr29oe';
+$mail->Username = '';//removed
+$mail->Password = '';//removed
 $mail->SMTPSecure = 'ssl';
 $mail->Port='465';
 $mail->CharSet = 'UTF-8';
